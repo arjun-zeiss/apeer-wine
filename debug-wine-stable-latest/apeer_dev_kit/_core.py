@@ -15,8 +15,13 @@ class _core:
         self._input_json = self._read_inputs()
         log.info('Found module\'s inputs to be {}'.format(self._input_json))
         if os.name == 'nt':
-            self.output_dir = 'C:\\output\\'
-            self.wfe_input_file_name = 'C:\\params\\WFE_input_params.json'
+            #self.output_dir = 'C:\\output\\'
+            #self.wfe_input_file_name = 'C:\\params\\WFE_input_params.json'
+            # Wine messes up this ADK fix.  Have to figure out how to deal with this later.
+            self.output_dir = 'Z:\\output\\'
+            self.wfe_input_file_name = 'Z:\\params\\WFE_input_params.json'
+            self.output_dir_linux = '/output/'
+            #self.wfe_input_file_name_linux = '/params/WFE_input_params.json'
         else:
             self.output_dir = '/output/'
             self.wfe_input_file_name = '/params/WFE_input_params.json'
@@ -84,7 +89,8 @@ class _core:
                 dst = self.output_dir + os.path.basename(filepath)
                 log.info('Copying file "{}" to "{}"'.format(os.path.basename(filepath), dst))
                 copyfile(filepath, dst)
-            self._set_output(key, dst)
+            dst_linux = self.output_dir_linux + os.path.basename(filepath)
+            self._set_output(key, dst_linux)
 
     def _finalize(self):
         with open(self._wfe_output_params_file, 'w') as fp:
